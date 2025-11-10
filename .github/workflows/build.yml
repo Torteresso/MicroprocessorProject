@@ -17,5 +17,7 @@ jobs:
         with:
           ocaml-compiler: 5
 
+      - run: opam install . --deps-only --with-test
+
       - name: Build
         run: opam exec -- dune exec -- simulator -print ./test/fulladder.net
