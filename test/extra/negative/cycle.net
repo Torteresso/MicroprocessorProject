@@ -1,0 +1,8 @@
+INPUT a
+OUTPUT r
+VAR a, b, c, r
+IN
+b = AND d a
+c = AND a b
+d = AND c b
+

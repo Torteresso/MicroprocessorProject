@@ -1,0 +1,7 @@
+INPUT a, b
+OUTPUT concat, select2a, slice1to3a
+VAR a:4, b:4, concat:8, select2a, slice1to3a:3
+IN
+concat = CONCAT a b
+select2a = SELECT 2 a
+slice1to3a = SLICE 1 3 a

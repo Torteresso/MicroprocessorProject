@@ -1,0 +1,5 @@
+INPUT a
+OUTPUT r
+VAR a, r
+IN
+r = SELECT 0 a

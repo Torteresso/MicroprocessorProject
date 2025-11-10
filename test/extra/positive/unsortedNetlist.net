@@ -1,0 +1,6 @@
+INPUT a
+OUTPUT shouldBe0
+VAR a, b, shouldBe0
+IN
+shouldBe0 = XOR b a
+b = a 

@@ -1,0 +1,10 @@
+INPUT read_adress, write_enable, write_adress, write_data,
+read_adress2, write_enable2, write_adress2, write_data2
+OUTPUT rom, ram, rom2, ram2
+VAR read_adress:4, write_adress:4, write_data:6, write_enable, rom:6, ram:6, 
+read_adress2:3, write_adress2:3, write_data2:2, write_enable2, rom2:2, ram2:2
+IN
+rom = ROM 4 6 read_adress
+ram = RAM 4 6 read_adress write_enable write_adress write_data
+rom2 = ROM 3 2 read_adress2
+ram2 = RAM 3 2 read_adress2 write_enable2 write_adress2 write_data2

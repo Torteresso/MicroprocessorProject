@@ -2,6 +2,7 @@ open Netlist_ast
 open Graph
 
 exception Combinational_cycle
+exception Same_variable_for_different_wires
 
 let read_exp eq : ident list =
   let l = ref [] in
@@ -31,7 +32,8 @@ let schedule (p : program) : program =
   let vars = ref [] in
   List.iter
     (fun (x, exp) ->
-      if List.exists (fun x2 -> x = x2) !vars then raise Combinational_cycle
+      if List.exists (fun x2 -> x = x2) !vars then
+        raise Same_variable_for_different_wires
       else vars := x :: !vars;
       if List.exists (fun n -> n.n_label = x) g.g_nodes then ()
       else add_node g x;

@@ -1,0 +1,5 @@
+INPUT read_adress, write_enable, write_adress, write_data
+OUTPUT ram
+VAR read_adress:4, write_adress:4, write_data:6, write_enable, ram:6
+IN
+ram = RAM 3 6 read_adress write_enable write_adress write_data

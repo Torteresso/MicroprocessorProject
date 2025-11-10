@@ -1,0 +1,5 @@
+INPUT a
+OUTPUT r
+VAR a:4, r
+IN
+r = SELECT 5 a

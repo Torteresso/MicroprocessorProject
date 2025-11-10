@@ -1,0 +1,5 @@
+INPUT a
+OUTPUT r
+VAR a:4, r:2
+IN
+r = SLICE 2 5 a

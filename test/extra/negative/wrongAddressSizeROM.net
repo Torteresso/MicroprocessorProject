@@ -1,0 +1,5 @@
+INPUT read_adress
+OUTPUT rom
+VAR read_adress:4
+IN
+rom = ROM 3 6 read_adress

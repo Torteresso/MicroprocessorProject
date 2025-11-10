@@ -1,0 +1,9 @@
+INPUT forReg, read_adress, write_enable, write_adress, write_data
+OUTPUT rom, ram, reg
+VAR forReg:2, read_adress:4, write_adress:4, write_data:6, write_enable, 
+rom:6, ram:6, reg:2
+IN
+rom = ROM 4 6 read_adress
+ram = RAM 4 6 read_adress write_enable write_adress write_data
+reg = forReg
+

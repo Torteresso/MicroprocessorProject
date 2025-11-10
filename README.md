@@ -3,6 +3,14 @@ REQUIREMENTS
 
 * Dune (version >= 3.10)  
 
+You can then run 
+
+```
+opam install . --deps-only
+```
+
+to install dependencies if needed.
+
 PRESENTATION
 =============
 
@@ -16,10 +24,9 @@ To simulate a circuit, simply run the following command :
 
 ```
 opam exec -- dune exec -- simulator -n 10 your_netlist.net 
-
 ```
 
-You should provide the circuit description with a netlist file (here ./test/fulladder.net). 
+You should provide the circuit description with a netlist file.
 You can change the number of steps of the simulation with the option -n <n_steps>.
 
 Alternatively, you can only print the netlist of a circuit with the command : 
@@ -27,7 +34,6 @@ Alternatively, you can only print the netlist of a circuit with the command :
 
 ```
 opam exec -- dune exec -- simulator -print your_netlist.net 
-
 ```
 
 CODE ARCHITECTURE
@@ -39,10 +45,31 @@ The scheduler folder contains code that simulator use graph representation to ma
 
 The simulator folder contains code that compile the simulator.
 
+TESTS
+==============
+
+I added some extra tests to the default one :
+
+Some that should compile (test/extra/positive folder) : 
+
+* Some that test every operations and memory on 1 bit and buses.
+* Some that test the possibility to have multiple ROMs and RAMs. 
+* One that takes an unsorted netlist as input.
+
+Some that should not compile (test/extra/negative folder) : 
+
+* Some that uses 1 bit instead of buses and vis versa.
+* Some that uses wrong arguments for operators.
+* Some that uses wrong arguments for address in ROM/RAM.
+* One that define multiple time the same variable.
+* One that has cycle.
+
 
 DIFFICULTIES ENCOUNTERED
 ==============
 
 - Learn Ocaml as it was a new language for me.
 - Understand how ROM/RAM should behave if multiple equations in the netlist use it 
+
+
 

@@ -21,6 +21,8 @@ let bitToInt = function
         (List.rev (Array.to_list bA));
       !v
 
+let getLenghtOfBit = function VBit b -> 1 | VBitArray bA -> Array.length bA
+
 let createMemory memoryDataF word_size =
   let defaultB =
     match word_size with
@@ -31,7 +33,6 @@ let createMemory memoryDataF word_size =
     Hashtbl.add env (memoryDataF i) { current = defaultB; previous = defaultB }
   done
 
-(* TODO : error if Not_found from env*)
 let evaluate expr x =
   let evaluateArg = function
     | Avar x -> (Hashtbl.find env (Var x)).current
@@ -77,7 +78,11 @@ let evaluate expr x =
       if Hashtbl.mem env (ROM (x, 0)) then ()
       else createMemory (fun i -> ROM (x, i)) word_size;
       let read_address = evaluateArg read_address in
-      (Hashtbl.find env (ROM (x, bitToInt read_address))).current
+      if address_size <> getLenghtOfBit read_address then
+        raise
+          (Netlist_compilation_error
+             "read_address of ROM must be of size address_size")
+      else (Hashtbl.find env (ROM (x, bitToInt read_address))).current
   | Eram
       ( address_size,
         word_size,
@@ -85,23 +90,36 @@ let evaluate expr x =
         write_enable,
         write_address,
         write_data ) -> (
+      if read_address <> write_address then
+        raise
+          (Netlist_compilation_error
+             "read_address must be of same size as write_address in RAM \
+              operation")
+      else ();
       if Hashtbl.mem env (RAM (x, 0)) then ()
       else createMemory (fun i -> RAM (x, i)) word_size;
       let read_address = evaluateArg read_address in
-      match evaluateArg write_enable with
-      | VBit b ->
-          let write_address = evaluateArg write_address in
-          let write_data = evaluateArg write_data in
-          let v = (Hashtbl.find env (RAM (x, bitToInt read_address))).current in
-          if b then
-            let d = Hashtbl.find env (RAM (x, bitToInt write_address)) in
-            d.current <- write_data
-          else ();
-          v
-      | _ ->
-          raise
-            (Netlist_compilation_error
-               "The write_enable entry for RAM operation must be only 1 bit"))
+      if address_size <> getLenghtOfBit read_address then
+        raise
+          (Netlist_compilation_error
+             "read_address of ROM must be of size address_size")
+      else
+        match evaluateArg write_enable with
+        | VBit b ->
+            let write_address = evaluateArg write_address in
+            let write_data = evaluateArg write_data in
+            let v =
+              (Hashtbl.find env (RAM (x, bitToInt read_address))).current
+            in
+            if b then
+              let d = Hashtbl.find env (RAM (x, bitToInt write_address)) in
+              d.current <- write_data
+            else ();
+            v
+        | _ ->
+            raise
+              (Netlist_compilation_error
+                 "The write_enable entry for RAM operation must be only 1 bit"))
   | Econcat (a1, a2) ->
       let toArray = function VBit b -> [| b |] | VBitArray bA -> bA in
       let v1 = evaluateArg a1 in
@@ -190,12 +208,7 @@ let simulator program number_steps =
     List.iter
       (fun x ->
         let d = Hashtbl.find env (Var x) in
-        let v =
-          getCorrectInput x
-            (match d.current with
-            | VBit _ -> 1
-            | VBitArray bA -> Array.length bA)
-        in
+        let v = getCorrectInput x (getLenghtOfBit d.current) in
         d.current <- v)
       program.p_inputs;
     List.iter
@@ -217,8 +230,11 @@ let compile filename =
       let p = Scheduler.schedule p in
       if !print_only then Netlist.print_program stdout p
       else simulator p !number_steps
-    with Scheduler.Combinational_cycle ->
-      Format.eprintf "The netlist has a combinatory cycle.@."
+    with
+    | Scheduler.Combinational_cycle ->
+        Format.eprintf "The netlist has a combinatory cycle.@."
+    | Scheduler.Same_variable_for_different_wires ->
+        Format.eprintf "The netlist defines multiple times the same variable"
   with Netlist.Parse_error s ->
     Format.eprintf "An error accurred: %s@." s;
     exit 2

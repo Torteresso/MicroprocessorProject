@@ -1,0 +1,14 @@
+INPUT a, b, muxChoice
+OUTPUT shouldBe1, shouldBeA, notA, and, or, nand,
+xor, mux
+VAR shouldBe1, shouldBeA, notA, and, or, nand,
+xor, mux, a, b, muxChoice
+IN
+shouldBe1 = 1
+shouldBeA = a
+notA = NOT a
+and = AND a b
+or = OR a b
+nand = NAND a b
+xor = XOR a b
+mux = MUX muxChoice a b

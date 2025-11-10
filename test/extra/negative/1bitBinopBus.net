@@ -1,0 +1,5 @@
+INPUT a, b
+OUTPUT r
+VAR a, b:4, r
+IN
+r = AND a b
