@@ -215,7 +215,8 @@ let compile filename =
     let p = Netlist.read_file filename in
     try
       let p = Scheduler.schedule p in
-      simulator p !number_steps
+      if !print_only then Netlist.print_program stdout p
+      else simulator p !number_steps
     with Scheduler.Combinational_cycle ->
       Format.eprintf "The netlist has a combinatory cycle.@."
   with Netlist.Parse_error s ->
@@ -224,7 +225,10 @@ let compile filename =
 
 let main () =
   Arg.parse
-    [ ("-n", Arg.Set_int number_steps, "Number of steps to simulate") ]
+    [
+      ("-print", Arg.Set print_only, "Only print the result of scheduling");
+      ("-n", Arg.Set_int number_steps, "Number of steps to simulate");
+    ]
     compile ""
 ;;
 

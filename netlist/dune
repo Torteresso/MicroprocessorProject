@@ -1,0 +1,13 @@
+(library
+  (name netlist)
+  (wrapped false)
+  (modules netlist 
+           netlist_ast 
+           netlist_lexer 
+           netlist_parser
+           netlist_printer)
+)
+(menhir
+ (modules netlist_parser))
+
+(ocamllex netlist_lexer)

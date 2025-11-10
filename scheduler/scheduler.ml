@@ -5,7 +5,7 @@ exception Combinational_cycle
 
 let read_exp eq : ident list =
   let l = ref [] in
-  let add_arg_to_list = function Avar x -> l := x :: !l | Aconst x -> () in
+  let add_arg_to_list = function Avar x -> l := x :: !l | Aconst _ -> () in
   (let _, exp = eq in
    match exp with
    | Earg x -> add_arg_to_list x

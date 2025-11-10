@@ -1,0 +1,9 @@
+(executable
+ (name netlist_simulator)
+ (public_name simulator)
+ (libraries netlist
+            scheduler
+            unix)
+ (modes byte exe)
+ (flags ())
+)

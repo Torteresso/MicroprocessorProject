@@ -1,7 +1,7 @@
 (lang dune 3.10)
 
 (package
- (name lab1)
+ (name project)
  (depends ocaml dune)
  (allow_empty))
  
