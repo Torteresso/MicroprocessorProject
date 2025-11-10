@@ -1,0 +1,6 @@
+INPUT read_address, write_enable, write_address, write_data, read_address2, write_enable2, write_address2, write_data2
+OUTPUT r, r2
+VAR read_address:4, write_enable, write_address:4, write_data:3, read_address2:4, write_enable2, write_address2:4, write_data2:2, r:3, r2:2
+IN
+r = RAM 4 3 read_address write_enable write_address write_data 
+r2 = RAM 4 2 read_address2 write_enable2 write_address2 write_data2 
