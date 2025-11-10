@@ -20,4 +20,4 @@ jobs:
       - run: opam install . --deps-only
 
       - name: Build
-        run: opam exec -- dune exec -- simulator -print ./test/fulladder.net
+        run: opam exec -- dune exec -- simulator -print ${{github.workspace}}/test/fulladder.net
